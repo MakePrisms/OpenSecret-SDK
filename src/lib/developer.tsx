@@ -12,6 +12,7 @@ import {
 } from "./attestationForView";
 import type { AttestationDocument } from "./attestation";
 import { PcrConfig } from "./pcr";
+import { getStorage } from "./storage";
 import type {
   Organization,
   Project,
@@ -523,8 +524,8 @@ export function OpenSecretDeveloper({
   }, [apiUrl]);
 
   async function fetchDeveloper() {
-    const access_token = window.localStorage.getItem("access_token");
-    const refresh_token = window.localStorage.getItem("refresh_token");
+    const access_token = getStorage().persistent.getItem("access_token");
+    const refresh_token = getStorage().persistent.getItem("refresh_token");
     if (!access_token || !refresh_token) {
       setAuth({
         loading: false,
@@ -574,8 +575,8 @@ export function OpenSecretDeveloper({
   async function signIn(email: string, password: string) {
     try {
       const { access_token, refresh_token } = await platformApi.platformLogin(email, password);
-      window.localStorage.setItem("access_token", access_token);
-      window.localStorage.setItem("refresh_token", refresh_token);
+      getStorage().persistent.setItem("access_token", access_token);
+      getStorage().persistent.setItem("refresh_token", refresh_token);
       await fetchDeveloper();
       return { access_token, refresh_token, id: "", email };
     } catch (error) {
@@ -592,8 +593,8 @@ export function OpenSecretDeveloper({
         invite_code,
         name
       );
-      window.localStorage.setItem("access_token", access_token);
-      window.localStorage.setItem("refresh_token", refresh_token);
+      getStorage().persistent.setItem("access_token", access_token);
+      getStorage().persistent.setItem("refresh_token", refresh_token);
       await fetchDeveloper();
       return { access_token, refresh_token, id: "", email, name };
     } catch (error) {
@@ -608,7 +609,7 @@ export function OpenSecretDeveloper({
     signUp,
     refetchDeveloper: fetchDeveloper,
     signOut: async () => {
-      const refresh_token = window.localStorage.getItem("refresh_token");
+      const refresh_token = getStorage().persistent.getItem("refresh_token");
       if (refresh_token) {
         try {
           await platformApi.platformLogout(refresh_token);
@@ -616,8 +617,8 @@ export function OpenSecretDeveloper({
           console.error("Error during logout:", error);
         }
       }
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
+      getStorage().persistent.removeItem("access_token");
+      getStorage().persistent.removeItem("refresh_token");
       setAuth({
         loading: false,
         developer: undefined

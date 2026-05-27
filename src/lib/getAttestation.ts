@@ -3,6 +3,7 @@ import { keyExchange } from "./api";
 import nacl from "tweetnacl";
 import { ChaCha20Poly1305 } from "@stablelib/chacha20poly1305";
 import { encode, decode } from "@stablelib/base64";
+import { getStorage } from "./storage";
 
 export interface Attestation {
   sessionKey: Uint8Array | null;
@@ -30,8 +31,8 @@ export async function getAttestation(
   explicitApiUrl?: string
 ): Promise<Attestation> {
   // Check if we already have a sessionKey and sessionId in sessionstorage
-  const sessionKey = sessionStorage.getItem("sessionKey");
-  const sessionId = sessionStorage.getItem("sessionId");
+  const sessionKey = getStorage().session.getItem("sessionKey");
+  const sessionId = getStorage().session.getItem("sessionId");
 
   console.groupCollapsed("Attestation");
 
@@ -76,8 +77,8 @@ export async function getAttestation(
 
       if (decryptedSessionKey) {
         console.log("Session key decrypted successfully");
-        window.sessionStorage.setItem("sessionKey", encode(decryptedSessionKey));
-        window.sessionStorage.setItem("sessionId", session_id);
+        getStorage().session.setItem("sessionKey", encode(decryptedSessionKey));
+        getStorage().session.setItem("sessionId", session_id);
         return { sessionKey: decryptedSessionKey, sessionId: session_id };
       } else {
         throw new Error("Failed to decrypt session key");

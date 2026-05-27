@@ -1,6 +1,7 @@
 import { decryptMessage, encryptMessage } from "./encryption";
 import { getAttestation } from "./getAttestation";
 import * as api from "./api";
+import { getStorage } from "./storage";
 
 export interface CustomFetchOptions {
   apiKey?: string; // Optional API key to use instead of JWT token
@@ -18,7 +19,7 @@ export function createCustomFetch(
       }
 
       // Otherwise, use the standard JWT token
-      const currentAccessToken = window.localStorage.getItem("access_token");
+      const currentAccessToken = getStorage().persistent.getItem("access_token");
       if (!currentAccessToken) {
         throw new Error("No access token or API key available");
       }

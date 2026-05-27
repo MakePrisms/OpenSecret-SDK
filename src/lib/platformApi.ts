@@ -1,4 +1,5 @@
 import { encryptedApiCall, authenticatedApiCall } from "./encryptedApi";
+import { getStorage } from "./storage";
 
 // Platform Auth Types
 export type PlatformLoginResponse = {
@@ -182,7 +183,7 @@ export async function platformLogout(refresh_token: string): Promise<void> {
  * It returns new access and refresh tokens if validation succeeds.
  */
 export async function platformRefreshToken(): Promise<PlatformRefreshResponse> {
-  const refresh_token = window.localStorage.getItem("refresh_token");
+  const refresh_token = getStorage().persistent.getItem("refresh_token");
   if (!refresh_token) throw new Error("No refresh token available");
 
   const refreshData = { refresh_token };
@@ -196,8 +197,8 @@ export async function platformRefreshToken(): Promise<PlatformRefreshResponse> {
       "Failed to refresh platform token"
     );
 
-    window.localStorage.setItem("access_token", response.access_token);
-    window.localStorage.setItem("refresh_token", response.refresh_token);
+    getStorage().persistent.setItem("access_token", response.access_token);
+    getStorage().persistent.setItem("refresh_token", response.refresh_token);
     return response;
   } catch (error) {
     console.error("Error refreshing platform token:", error);

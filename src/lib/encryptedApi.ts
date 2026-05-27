@@ -3,6 +3,7 @@ import { getAttestation } from "./getAttestation";
 import { refreshToken } from "./api";
 import { platformRefreshToken } from "./platformApi";
 import { apiConfig } from "./apiConfig";
+import { getStorage } from "./storage";
 
 interface EncryptedResponse {
   encrypted: string;
@@ -37,7 +38,7 @@ export async function authenticatedApiCall<T, U>(
       }
 
       // Always get the latest token from localStorage
-      const accessToken = window.localStorage.getItem("access_token");
+      const accessToken = getStorage().persistent.getItem("access_token");
       if (!accessToken) {
         throw new Error("No access token available");
       }

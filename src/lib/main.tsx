@@ -14,6 +14,7 @@ import type { AttestationDocument } from "./attestation";
 import type { LoginResponse, ThirdPartyTokenResponse, DocumentResponse } from "./api";
 import { PcrConfig } from "./pcr";
 import { configure } from "./config";
+import { browserStorage, getStorage } from "./storage";
 
 export type OpenSecretAuthState = {
   loading: boolean;
@@ -1027,8 +1028,9 @@ export function OpenSecretProvider({
       );
     }
     
-    // Configure the SDK with the provided values
-    configure({ apiUrl, clientId });
+    // Configure the SDK with the provided values. OpenSecretProvider is a React DOM
+    // component, so browserStorage is always the correct backing store here.
+    configure({ apiUrl, clientId, storage: browserStorage });
   }, [apiUrl, clientId]);
 
   // Create aiCustomFetch when API is configured (supports JWT or API key internally)
@@ -1042,8 +1044,8 @@ export function OpenSecretProvider({
   }, [apiUrl, apiKey]);
 
   async function fetchUser() {
-    const access_token = window.localStorage.getItem("access_token");
-    const refresh_token = window.localStorage.getItem("refresh_token");
+    const access_token = getStorage().persistent.getItem("access_token");
+    const refresh_token = getStorage().persistent.getItem("refresh_token");
     if (!access_token || !refresh_token) {
       setAuth({
         loading: false,
