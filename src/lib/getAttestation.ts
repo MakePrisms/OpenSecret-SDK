@@ -46,7 +46,7 @@ export async function getAttestation(
 
     // Need to get a new attestation
     // (Will use test nonce if provided)
-    const attestationNonce = window.crypto.randomUUID();
+    const attestationNonce = globalThis.crypto.randomUUID();
 
     console.log("Generated attestation nonce:", attestationNonce);
     const document = await verifyAttestation(attestationNonce, explicitApiUrl);
