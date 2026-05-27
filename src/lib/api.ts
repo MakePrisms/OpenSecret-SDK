@@ -2,6 +2,7 @@ import { encode } from "@stablelib/base64";
 import { authenticatedApiCall, encryptedApiCall, openAiAuthenticatedApiCall } from "./encryptedApi";
 import type { Model } from "openai/resources/models.js";
 import { getConfig } from "./config";
+import { getStorage } from "./storage";
 
 export function getApiUrl(): string {
   return getConfig().apiUrl;
@@ -50,8 +51,8 @@ export async function fetchLogin(
   );
   
   // Store tokens automatically
-  window.localStorage.setItem("access_token", response.access_token);
-  window.localStorage.setItem("refresh_token", response.refresh_token);
+  getStorage().persistent.setItem("access_token", response.access_token);
+  getStorage().persistent.setItem("refresh_token", response.refresh_token);
   
   return response;
 }
@@ -68,8 +69,8 @@ export async function fetchGuestLogin(
   );
   
   // Store tokens automatically
-  window.localStorage.setItem("access_token", response.access_token);
-  window.localStorage.setItem("refresh_token", response.refresh_token);
+  getStorage().persistent.setItem("access_token", response.access_token);
+  getStorage().persistent.setItem("refresh_token", response.refresh_token);
   
   return response;
 }
@@ -99,8 +100,8 @@ export async function fetchSignUp(
   });
   
   // Store tokens automatically
-  window.localStorage.setItem("access_token", response.access_token);
-  window.localStorage.setItem("refresh_token", response.refresh_token);
+  getStorage().persistent.setItem("access_token", response.access_token);
+  getStorage().persistent.setItem("refresh_token", response.refresh_token);
   
   return response;
 }
@@ -120,14 +121,14 @@ export async function fetchGuestSignUp(
   });
   
   // Store tokens automatically
-  window.localStorage.setItem("access_token", response.access_token);
-  window.localStorage.setItem("refresh_token", response.refresh_token);
+  getStorage().persistent.setItem("access_token", response.access_token);
+  getStorage().persistent.setItem("refresh_token", response.refresh_token);
   
   return response;
 }
 
 export async function refreshToken(): Promise<RefreshResponse> {
-  const refresh_token = window.localStorage.getItem("refresh_token");
+  const refresh_token = getStorage().persistent.getItem("refresh_token");
   if (!refresh_token) throw new Error("No refresh token available");
 
   const refreshData = { refresh_token };
@@ -141,8 +142,8 @@ export async function refreshToken(): Promise<RefreshResponse> {
       "Failed to refresh token"
     );
 
-    window.localStorage.setItem("access_token", response.access_token);
-    window.localStorage.setItem("refresh_token", response.refresh_token);
+    getStorage().persistent.setItem("access_token", response.access_token);
+    getStorage().persistent.setItem("refresh_token", response.refresh_token);
     return response;
   } catch (error) {
     console.error("Error refreshing token:", error);
@@ -211,7 +212,7 @@ export async function fetchList(): Promise<KVListItem[]> {
 }
 
 export async function fetchLogout(): Promise<void> {
-  const refresh_token = window.localStorage.getItem("refresh_token");
+  const refresh_token = getStorage().persistent.getItem("refresh_token");
   
   if (refresh_token) {
     try {
@@ -222,10 +223,10 @@ export async function fetchLogout(): Promise<void> {
     }
   }
   
-  localStorage.removeItem("access_token");
-  localStorage.removeItem("refresh_token");
-  sessionStorage.removeItem("sessionKey");
-  sessionStorage.removeItem("sessionId");
+  getStorage().persistent.removeItem("access_token");
+  getStorage().persistent.removeItem("refresh_token");
+  getStorage().session.removeItem("sessionKey");
+  getStorage().session.removeItem("sessionId");
 }
 
 export async function verifyEmail(code: string): Promise<void> {
@@ -374,8 +375,8 @@ export async function handleGitHubCallback(
     );
     
     // Store tokens automatically
-    window.localStorage.setItem("access_token", response.access_token);
-    window.localStorage.setItem("refresh_token", response.refresh_token);
+    getStorage().persistent.setItem("access_token", response.access_token);
+    getStorage().persistent.setItem("refresh_token", response.refresh_token);
     
     return response;
   } catch (error) {
@@ -460,8 +461,8 @@ export async function handleGoogleCallback(
     );
     
     // Store tokens automatically
-    window.localStorage.setItem("access_token", response.access_token);
-    window.localStorage.setItem("refresh_token", response.refresh_token);
+    getStorage().persistent.setItem("access_token", response.access_token);
+    getStorage().persistent.setItem("refresh_token", response.refresh_token);
     
     return response;
   } catch (error) {
@@ -555,8 +556,8 @@ export async function handleAppleCallback(
     );
     
     // Store tokens automatically
-    window.localStorage.setItem("access_token", response.access_token);
-    window.localStorage.setItem("refresh_token", response.refresh_token);
+    getStorage().persistent.setItem("access_token", response.access_token);
+    getStorage().persistent.setItem("refresh_token", response.refresh_token);
     
     return response;
   } catch (error) {
@@ -646,8 +647,8 @@ export async function handleAppleNativeSignIn(
     );
     
     // Store tokens automatically
-    window.localStorage.setItem("access_token", response.access_token);
-    window.localStorage.setItem("refresh_token", response.refresh_token);
+    getStorage().persistent.setItem("access_token", response.access_token);
+    getStorage().persistent.setItem("refresh_token", response.refresh_token);
     
     return response;
   } catch (error) {
