@@ -53,6 +53,10 @@ export type { Model } from "openai/resources/models.js";
 export { configure, getConfig, isConfigured, resetConfig } from "./config";
 export type { OpenSecretConfig } from "./config";
 
+// Export storage abstraction
+export { getStorage, setStorageProvider, resetStorage, browserStorage } from "./storage";
+export type { StorageProvider } from "./storage";
+
 // Export API configuration
 export { apiConfig, type ApiContext, type ApiEndpoint } from "./apiConfig";
 

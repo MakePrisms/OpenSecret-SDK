@@ -2,9 +2,17 @@
  * Global configuration for OpenSecret SDK
  */
 
+import { setStorageProvider, resetStorage, type StorageProvider } from "./storage";
+
 export interface OpenSecretConfig {
   apiUrl: string;
   clientId: string;
+  /**
+   * Storage provider backing access tokens and session state.
+   * Browser apps can pass the exported `browserStorage` helper;
+   * non-browser consumers implement the interface against their own store.
+   */
+  storage: StorageProvider;
 }
 
 let config: OpenSecretConfig | null = null;
@@ -35,9 +43,16 @@ export function configure(options: OpenSecretConfig): void {
     throw new Error('OpenSecret SDK requires a non-empty clientId');
   }
 
+  if (!options.storage) {
+    throw new Error('OpenSecret SDK requires a storage provider on configure({ storage })');
+  }
+
+  setStorageProvider(options.storage);
+
   config = {
     apiUrl: options.apiUrl.replace(/\/$/, ''), // Remove trailing slash
-    clientId: options.clientId
+    clientId: options.clientId,
+    storage: options.storage
   };
 }
 
@@ -66,4 +81,5 @@ export function isConfigured(): boolean {
  */
 export function resetConfig(): void {
   config = null;
+  resetStorage();
 }

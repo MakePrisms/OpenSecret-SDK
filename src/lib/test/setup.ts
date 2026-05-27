@@ -1,4 +1,5 @@
 import { configure } from "../config";
+import { browserStorage } from "../storage";
 
 const TEST_API_URL = process.env.VITE_OPEN_SECRET_API_URL;
 
@@ -12,7 +13,8 @@ const TEST_CLIENT_ID = "test-client-id-for-testing";
 // Configure the SDK for tests
 configure({
   apiUrl: TEST_API_URL,
-  clientId: TEST_CLIENT_ID
+  clientId: TEST_CLIENT_ID,
+  storage: browserStorage
 });
 
 export { TEST_API_URL, TEST_CLIENT_ID };
