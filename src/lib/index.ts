@@ -127,24 +127,12 @@ export {
   EXPECTED_ROOT_CERT_HASH as expectedRootCertHash
 } from "./attestationForView";
 
-// Export the provider and context
-export { OpenSecretProvider, OpenSecretContext } from "./main";
-export { OpenSecretDeveloper, OpenSecretDeveloperContext } from "./developer";
+// NOTE: The React provider, contexts, and hooks are intentionally NOT exported
+// from the default barrel — importing the default package entry must pull ZERO
+// react into the module graph. They are available via the "<pkg>/react" subpath
+// (see src/lib/react.ts). This keeps the core surface react-free.
 
-// Export the hooks
-export { useOpenSecret } from "./context";
-export { useOpenSecretDeveloper } from "./developerContext";
-
-// Export types needed by consumers
-export type { OpenSecretAuthState, OpenSecretContextType } from "./main";
-export type {
-  OpenSecretDeveloperAuthState,
-  OpenSecretDeveloperContextType,
-  DeveloperRole,
-  OrganizationDetails,
-  ProjectDetails,
-  ProjectSettings
-} from "./developer";
+// Export core types needed by consumers
 export type { AttestationDocument } from "./attestation";
 export type { ParsedAttestationView } from "./attestationForView";
 export type { PcrConfig, Pcr0ValidationResult } from "./pcr";

@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import React from "react";
-import { useOpenSecret } from "./lib";
+import { useOpenSecret } from "./lib/react";
 import type { KVListItem } from "./lib";
 import { schnorr, secp256k1 } from "@noble/curves/secp256k1";
 import { AI } from "./AI";

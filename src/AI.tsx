@@ -1,4 +1,4 @@
-import { useOpenSecret } from "./lib";
+import { useOpenSecret } from "./lib/react";
 import { useState, FormEvent } from "react";
 import OpenAI from "openai";
 

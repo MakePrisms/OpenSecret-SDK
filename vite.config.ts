@@ -46,27 +46,28 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/lib/index.ts"),
-      name: "OpenSecretReact",
-      fileName: (format) => `opensecret-react.${format}.js`
+      // Two entries: the default core barrel (react-free) and the opt-in react barrel.
+      // Multi-entry lib mode cannot emit UMD, so we emit ES + CJS only.
+      entry: {
+        index: path.resolve(__dirname, "src/lib/index.ts"),
+        react: path.resolve(__dirname, "src/lib/react.ts")
+      },
+      formats: ["es", "cjs"],
+      // index -> opensecret-core.{es,cjs}.js ; react -> opensecret-react.{es,cjs}.js
+      fileName: (format, entryName) => {
+        const base = entryName === "index" ? "opensecret-core" : "opensecret-react";
+        return `${base}.${format}.js`;
+      }
     },
     rollupOptions: {
       // Externalize React and React DOM along with their internals
       external: [
-        "react", 
+        "react",
         "react-dom",
         "react/jsx-runtime",
         /^react\/.*/,
         /^react-dom\/.*/
-      ],
-      output: {
-        // Provide global variables to use in the UMD build
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-          "react/jsx-runtime": "React"
-        }
-      }
+      ]
     }
   }
 });
