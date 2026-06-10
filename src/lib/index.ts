@@ -127,24 +127,6 @@ export {
   EXPECTED_ROOT_CERT_HASH as expectedRootCertHash
 } from "./attestationForView";
 
-// Export the provider and context
-export { OpenSecretProvider, OpenSecretContext } from "./main";
-export { OpenSecretDeveloper, OpenSecretDeveloperContext } from "./developer";
-
-// Export the hooks
-export { useOpenSecret } from "./context";
-export { useOpenSecretDeveloper } from "./developerContext";
-
-// Export types needed by consumers
-export type { OpenSecretAuthState, OpenSecretContextType } from "./main";
-export type {
-  OpenSecretDeveloperAuthState,
-  OpenSecretDeveloperContextType,
-  DeveloperRole,
-  OrganizationDetails,
-  ProjectDetails,
-  ProjectSettings
-} from "./developer";
 export type { AttestationDocument } from "./attestation";
 export type { ParsedAttestationView } from "./attestationForView";
 export type { PcrConfig, Pcr0ValidationResult } from "./pcr";
