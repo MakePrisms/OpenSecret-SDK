@@ -1,6 +1,6 @@
 {
   "name": "@agicash/opensecret-sdk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publishConfig": {
     "access": "public"
   },
@@ -35,10 +35,6 @@
     "docs:clear": "cd website && bun run clear",
     "docs:deploy": "cd website && bun run deploy"
   },
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
-  },
   "dependencies": {
     "@peculiar/x509": "^1.12.2",
     "@stablelib/base64": "^2.0.0",
@@ -53,12 +49,7 @@
     "@noble/curves": "^1.6.0",
     "@noble/hashes": "^1.5.0",
     "@types/bun": "latest",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^9.13.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
     "openai": "^5.20.0",
     "prettier": "^3.3.3",
